@@ -1,0 +1,257 @@
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { 
+  Settings as SettingsIcon, 
+  Bell, 
+  Shield, 
+  Eye, 
+  Moon, 
+  Globe, 
+  Smartphone,
+  CreditCard,
+  Lock
+} from 'lucide-react';
+
+const Settings = () => {
+  const [notifications, setNotifications] = useState({
+    transactions: true,
+    loans: true,
+    security: true,
+    marketing: false
+  });
+  
+  const [security, setSecurity] = useState({
+    twoFactor: true,
+    biometric: false,
+    sessionTimeout: '30'
+  });
+
+  const [preferences, setPreferences] = useState({
+    darkMode: true,
+    language: 'en',
+    currency: 'USD'
+  });
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Settings</h1>
+          <p className="text-slate-400">Manage your account preferences and security</p>
+        </div>
+
+        <div className="space-y-6">
+          {/* Account Settings */}
+          <Card className="bg-slate-800/50 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <SettingsIcon className="mr-2" size={20} />
+                Account Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-slate-300">Display Name</Label>
+                  <Input 
+                    defaultValue="John Doe"
+                    className="bg-slate-700 border-slate-600 text-white"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-slate-300">Phone Number</Label>
+                  <Input 
+                    defaultValue="+1 (555) 123-4567"
+                    className="bg-slate-700 border-slate-600 text-white"
+                  />
+                </div>
+              </div>
+              <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                Update Information
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Security Settings */}
+          <Card className="bg-slate-800/50 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Shield className="mr-2" size={20} />
+                Security Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Lock size={20} className="text-slate-400" />
+                  <div>
+                    <p className="text-white">Two-Factor Authentication</p>
+                    <p className="text-slate-400 text-sm">Add an extra layer of security</p>
+                  </div>
+                </div>
+                <Switch 
+                  checked={security.twoFactor}
+                  onCheckedChange={(checked) => setSecurity({...security, twoFactor: checked})}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Smartphone size={20} className="text-slate-400" />
+                  <div>
+                    <p className="text-white">Biometric Login</p>
+                    <p className="text-slate-400 text-sm">Use fingerprint or face ID</p>
+                  </div>
+                </div>
+                <Switch 
+                  checked={security.biometric}
+                  onCheckedChange={(checked) => setSecurity({...security, biometric: checked})}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-slate-300">Session Timeout (minutes)</Label>
+                <select 
+                  value={security.sessionTimeout}
+                  onChange={(e) => setSecurity({...security, sessionTimeout: e.target.value})}
+                  className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white"
+                >
+                  <option value="15">15 minutes</option>
+                  <option value="30">30 minutes</option>
+                  <option value="60">1 hour</option>
+                  <option value="120">2 hours</option>
+                </select>
+              </div>
+
+              <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                Change Password
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Notification Settings */}
+          <Card className="bg-slate-800/50 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Bell className="mr-2" size={20} />
+                Notifications
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-white">Transaction Alerts</p>
+                  <p className="text-slate-400 text-sm">Get notified of all transactions</p>
+                </div>
+                <Switch 
+                  checked={notifications.transactions}
+                  onCheckedChange={(checked) => setNotifications({...notifications, transactions: checked})}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-white">Loan Updates</p>
+                  <p className="text-slate-400 text-sm">Payment reminders and updates</p>
+                </div>
+                <Switch 
+                  checked={notifications.loans}
+                  onCheckedChange={(checked) => setNotifications({...notifications, loans: checked})}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-white">Security Alerts</p>
+                  <p className="text-slate-400 text-sm">Important security notifications</p>
+                </div>
+                <Switch 
+                  checked={notifications.security}
+                  onCheckedChange={(checked) => setNotifications({...notifications, security: checked})}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-white">Marketing Communications</p>
+                  <p className="text-slate-400 text-sm">Promotional offers and updates</p>
+                </div>
+                <Switch 
+                  checked={notifications.marketing}
+                  onCheckedChange={(checked) => setNotifications({...notifications, marketing: checked})}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* App Preferences */}
+          <Card className="bg-slate-800/50 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center">
+                <Eye className="mr-2" size={20} />
+                App Preferences
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Moon size={20} className="text-slate-400" />
+                  <div>
+                    <p className="text-white">Dark Mode</p>
+                    <p className="text-slate-400 text-sm">Use dark theme</p>
+                  </div>
+                </div>
+                <Switch 
+                  checked={preferences.darkMode}
+                  onCheckedChange={(checked) => setPreferences({...preferences, darkMode: checked})}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-slate-300 flex items-center">
+                    <Globe className="mr-2" size={16} />
+                    Language
+                  </Label>
+                  <select 
+                    value={preferences.language}
+                    onChange={(e) => setPreferences({...preferences, language: e.target.value})}
+                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white"
+                  >
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                  </select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-slate-300 flex items-center">
+                    <CreditCard className="mr-2" size={16} />
+                    Currency
+                  </Label>
+                  <select 
+                    value={preferences.currency}
+                    onChange={(e) => setPreferences({...preferences, currency: e.target.value})}
+                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white"
+                  >
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="JPY">JPY (¥)</option>
+                  </select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Settings;

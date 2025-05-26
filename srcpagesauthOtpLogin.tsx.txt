@@ -1,0 +1,117 @@
+
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
+import { ArrowLeft, Smartphone } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+interface OtpLoginProps {
+  onLogin: (email: string, role: string) => void;
+}
+
+const OtpLogin: React.FC<OtpLoginProps> = ({ onLogin }) => {
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [step, setStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSendOtp = async () => {
+    if (email) {
+      setIsLoading(true);
+      // Simulate API call
+      setTimeout(() => {
+        setIsLoading(false);
+        setStep(2);
+      }, 1500);
+    }
+  };
+
+  const handleVerifyOtp = () => {
+    if (otp.length === 6) {
+      onLogin(email, 'customer');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-slate-800/50 border-slate-700 backdrop-blur-lg">
+        <CardHeader className="text-center">
+          <div className="flex items-center justify-center mb-4">
+            <Link to="/auth/login" className="absolute left-6 text-slate-400 hover:text-white">
+              <ArrowLeft size={20} />
+            </Link>
+            <Smartphone size={32} className="text-orange-500" />
+          </div>
+          <CardTitle className="text-2xl font-bold text-white">
+            {step === 1 ? 'OTP Login' : 'Verify OTP'}
+          </CardTitle>
+          <CardDescription className="text-slate-300">
+            {step === 1 ? 'Enter your email or phone number' : 'Enter the 6-digit code sent to your device'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {step === 1 ? (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="email-phone" className="text-slate-300">Email/Phone</Label>
+                <Input
+                  id="email-phone"
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
+                  placeholder="Enter email or phone number"
+                />
+              </div>
+              <Button 
+                onClick={handleSendOtp} 
+                disabled={!email || isLoading}
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+              >
+                {isLoading ? 'Sending...' : 'Send OTP'}
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="space-y-2">
+                <Label className="text-slate-300">Enter OTP</Label>
+                <div className="flex justify-center">
+                  <InputOTP maxLength={6} value={otp} onChange={(value) => setOtp(value)}>
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </div>
+              </div>
+              <Button 
+                onClick={handleVerifyOtp} 
+                disabled={otp.length !== 6}
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+              >
+                Verify & Login
+              </Button>
+              <div className="text-center">
+                <button 
+                  onClick={() => setStep(1)}
+                  className="text-orange-400 hover:text-orange-300 text-sm"
+                >
+                  Change email/phone
+                </button>
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default OtpLogin;
